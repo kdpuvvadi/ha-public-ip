@@ -12,3 +12,4 @@ PROVIDERS = {
     "amazon": "https://checkip.amazonaws.com",
 }
 
+CONF_PROVIDER = "provider"
