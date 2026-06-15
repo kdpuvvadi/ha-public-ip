@@ -60,9 +60,19 @@ class PublicIPCoordinator(DataUpdateCoordinator):
                 ) as response:
                     response.raise_for_status()
 
+                    current_ip = (await response.text()).strip()
+
+                    actual_provider = provider
+
+                    if provider == "auto":
+                        for name, provider_url in PROVIDERS.items():
+                            if provider_url == url:
+                                actual_provider = name
+                                break
+
                     return {
-                        "ip": (await response.text()).strip(),
-                        "provider": provider,
+                        "ip": current_ip,
+                        "provider": actual_provider,
                         "url": url,
                         "last_checked": dt_util.utcnow().isoformat(),
                     }
