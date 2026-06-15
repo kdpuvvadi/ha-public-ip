@@ -4,9 +4,9 @@ DOMAIN = "public_ip"
 
 SCAN_INTERVAL = 3600
 
-PROVIDERS = [
-    "https://ifconfig.me/ip",
-    "https://api.ipify.org",
-    "https://icanhazip.com",
-    "https://checkip.amazonaws.com",
-]
+PROVIDERS = {
+    "ifconfig": "https://ifconfig.me/ip",
+    "ipify": "https://api.ipify.org",
+    "icanhazip": "https://icanhazip.com",
+    "amazon": "https://checkip.amazonaws.com",
+}
