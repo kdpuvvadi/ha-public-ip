@@ -39,7 +39,10 @@ class PublicIPCoordinator(DataUpdateCoordinator):
         self.session = session
 
     async def _async_update_data(self):
-        provider = self.entry.data[CONF_PROVIDER]
+        provider = self.entry.options.get(
+            CONF_PROVIDER,
+            self.entry.data[CONF_PROVIDER],
+        )
 
         if provider == "auto":
             urls = [
