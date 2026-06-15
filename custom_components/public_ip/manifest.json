@@ -7,5 +7,6 @@
   "issue_tracker": "https://github.com/kdpuvvadi/ha-public-ip/issues",
   "iot_class": "cloud_polling",
   "requirements": [],
-  "codeowners": []
+  "codeowners": [],
+  "integration_type": "service"
 }

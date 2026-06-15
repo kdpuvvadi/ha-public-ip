@@ -22,6 +22,7 @@ class PublicIPSensor(
     _attr_name = "Public IP"
     _attr_unique_id = "public_ip"
     _attr_icon = "mdi:ip-network"
+    _attr_has_entity_name = True
 
     @property
     def native_value(self):
