@@ -1,0 +1,12 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Public IP"
+      }
+    },
+    "abort": {
+      "single_instance": "Only one instance is allowed."
+    }
+  }
+}
