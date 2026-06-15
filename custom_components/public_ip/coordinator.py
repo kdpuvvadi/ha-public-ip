@@ -1,5 +1,4 @@
 from datetime import timedelta
-import logging
 
 from aiohttp import ClientSession
 
@@ -8,48 +7,58 @@ from homeassistant.helpers.update_coordinator import (
     UpdateFailed,
 )
 
-from .const import DOMAIN, PROVIDERS, SCAN_INTERVAL
+from .const import (
+    CONF_PROVIDER,
+    DOMAIN,
+    PROVIDERS,
+    SCAN_INTERVAL,
+)
 
-_LOGGER = logging.getLogger(__name__)
 
-
-class PublicIPCoordinator(DataUpdateCoordinator):
-    """Coordinator for fetching public IP."""
-
-    def __init__(self, hass, session: ClientSession):
+class PublicIPCoordinator(
+    DataUpdateCoordinator
+):
+    def __init__(
+        self,
+        hass,
+        entry,
+        session: ClientSession,
+    ):
         super().__init__(
             hass,
-            _LOGGER,
+            logger=None,
             name=DOMAIN,
-            update_interval=timedelta(seconds=SCAN_INTERVAL),
+            update_interval=timedelta(
+                seconds=SCAN_INTERVAL
+            ),
         )
 
-        self._session = session
+        self.entry = entry
+        self.session = session
 
     async def _async_update_data(self):
-        """Fetch data from providers."""
+        provider = self.entry.data[
+            CONF_PROVIDER
+        ]
 
-        last_error = None
+        url = PROVIDERS[provider]
 
-        for provider_name, url in PROVIDERS.items():
-            try:
-                async with self._session.get(
-                    url,
-                    timeout=10,
-                ) as response:
-                    response.raise_for_status()
+        try:
+            async with self.session.get(
+                url,
+                timeout=10,
+            ) as response:
+                response.raise_for_status()
 
-                    ip = (await response.text()).strip()
+                return {
+                    "ip": (
+                        await response.text()
+                    ).strip(),
+                    "provider": provider,
+                    "url": url,
+                }
 
-                    return {
-                        "ip": ip,
-                        "provider": provider_name,
-                    }
-
-            except Exception as err:
-                last_error = err
-                continue
-
-        raise UpdateFailed(
-            f"All providers failed: {last_error}"
-        )
+        except Exception as err:
+            raise UpdateFailed(
+                f"Unable to update: {err}"
+            ) from err
