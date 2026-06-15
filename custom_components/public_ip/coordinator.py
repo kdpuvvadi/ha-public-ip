@@ -7,6 +7,7 @@ from homeassistant.helpers.update_coordinator import (
     DataUpdateCoordinator,
     UpdateFailed,
 )
+from homeassistant.util import dt as dt_util
 
 from .const import (
     CONF_PROVIDER,
@@ -63,6 +64,7 @@ class PublicIPCoordinator(DataUpdateCoordinator):
                         "ip": (await response.text()).strip(),
                         "provider": provider,
                         "url": url,
+                        "last_checked": dt_util.utcnow().isoformat(),
                     }
 
             except Exception as err:

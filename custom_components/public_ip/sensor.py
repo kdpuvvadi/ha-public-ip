@@ -32,7 +32,7 @@ class PublicIPSensor(
     SensorEntity,
 ):
     _attr_has_entity_name = True
-    _attr_name = "IP Address"
+    _attr_name = "Public IP"
     _attr_unique_id = "public_ip_address"
     _attr_icon = "mdi:ip-network"
 
@@ -45,7 +45,13 @@ class PublicIPSensor(
         return {
             "provider": self.coordinator.data[
                 "provider"
-            ]
+            ],
+            "provider_url": self.coordinator.data[
+                "url"
+            ],
+            "last_checked": self.coordinator.data[
+                "last_checked"
+            ],
         }
 
     @property
@@ -60,10 +66,10 @@ class PublicIPSensor(
 
         return DeviceInfo(
             identifiers={
-                (DOMAIN, "public_ip")
+                (DOMAIN, "internet")
             },
-            name="Public IP",
+            name="Internet Connection",
             manufacturer="KD Puvvadi",
-            model="Internet Connection",
+            model="Public IP Service",
             configuration_url=configuration_url,
         )
