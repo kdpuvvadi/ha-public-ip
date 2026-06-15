@@ -14,9 +14,10 @@ async def async_setup_entry(hass, entry):
     session = async_get_clientsession(hass)
 
     coordinator = PublicIPCoordinator(
-        hass=hass,
-        session=session,
-    )
+    hass=hass,
+    entry=entry,
+    session=session,
+)
 
     await coordinator.async_config_entry_first_refresh()
 
